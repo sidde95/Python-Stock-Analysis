@@ -5,57 +5,78 @@ A hands-on learning project for financial data analysis using Python and Jupyter
 ## 📂 Repository Structure
 
 ```
-├── 01_stock_data_exploration.ipynb   # Download, inspect, and visualize stock price data
+├── 00_setup.ipynb                    # Environment check + download OHLCV + basic price/volume plots + CSV export
+├── 01_stock_data_exploration.ipynb   # Deeper exploration of stock data + indicators/visuals (work-in-progress)
 ├── finance_knowledgebase.docx        # Finance concepts and interactive learning activities
 ├── requirements.txt                  # Python dependencies
+├── LICENSE                           # MIT License
 └── README.md                         # Project overview
 ```
+
+## 📓 Notebooks
+
+- **00_setup.ipynb**
+  - Validates your environment (imports + version checks)
+  - Downloads adjusted OHLCV using `yfinance`
+  - Plots:
+    - individual close-price charts
+    - normalised close-price comparison (rebased to 100)
+    - volume bar charts
+  - Exports per-ticker OHLCV CSVs to `data/`
+
+- **01_stock_data_exploration.ipynb**
+  - Explores downloaded OHLCV data in more detail (inspection, cleaning, visualisation)
+  - Intended place for technical indicators (e.g., RSI/MACD via `stockstats` / `ta`) and further analysis
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
 - Python 3.11+
-- pip
+- Git
 
-### Installation
+### Option A — venv + pip (recommended)
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/sidde95/python-stock-market-analysis.git
-   cd python-stock-market-analysis
-   ```
+```bash
+# from the repo root
+python -m venv .venv
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+# activate (Git Bash)
+source .venv/Scripts/activate
 
-3. Launch Jupyter Notebook:
-   ```bash
-   jupyter notebook
-   ```
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+# start Jupyter
+jupyter notebook
+```
+
+### Option B — conda
+
+```bash
+conda create -n stock-analysis python=3.11 -y
+conda activate stock-analysis
+pip install -r requirements.txt
+jupyter notebook
+```
 
 ## 📦 Dependencies
+
+The project uses a small set of common Python data-science libraries:
 
 | Library | Purpose |
 |---|---|
 | `pandas` | Data manipulation and tabular display |
 | `numpy` | Numerical computation |
-| `matplotlib` | Plotting and visualization |
+| `matplotlib` | Core plotting and visualisation |
+| `seaborn` | Statistical visualisations (optional but useful) |
+| `plotly` | Interactive charts (optional but useful) |
 | `yfinance` | Downloading stock market data from Yahoo Finance |
-| `multitasking` | Multithreading support for yfinance |
+| `multitasking` | Multithreading support used by `yfinance` |
 | `stockstats` | Technical indicators (e.g., MACD, RSI) |
 | `ta` | Additional technical analysis indicators |
-| `scikit-learn` | Machine learning for predictive models |
-| `ipynb` | Running/importing Jupyter notebooks |
-
-## 📊 Features
-
-- **Stock Data Retrieval** — Fetch historical OHLCV data for any ticker using `yfinance`
-- **Data Exploration** — Inspect DataFrames with `.head()`, `.tail()`, `.info()`, and index inspection
-- **Price Visualization** — Plot closing prices over time using `matplotlib`
-- **Finance Knowledge** — Reference document covering key financial concepts and activities
+| `scikit-learn` | Machine learning experiments (optional) |
+| `ipykernel` | Jupyter kernel support |
 
 ## 📖 Usage Example
 
@@ -64,17 +85,18 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 
-ticker = 'AAPL'
-data = pd.DataFrame(yf.download(ticker, start='2025-01-01', end='2026-01-01'))
+ticker = "AAPL"
+df = pd.DataFrame(yf.download(ticker, start="2025-01-01", end="2026-01-01", auto_adjust=True))
 
-plt.figure(figsize=(20, 4))
-plt.plot(data.index, data['Close'])
-plt.xlabel('Date')
-plt.ylabel('Close Price')
-plt.title('Apple Stock Price')
+plt.figure(figsize=(14, 4))
+plt.plot(df.index, df["Close"])
+plt.title("AAPL adjusted close")
+plt.xlabel("Date")
+plt.ylabel("Price (USD)")
+plt.grid(True, alpha=0.3)
 plt.show()
 ```
 
 ## 📝 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the **MIT License** (see `LICENSE`).
