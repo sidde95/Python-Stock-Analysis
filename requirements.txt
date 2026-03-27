@@ -4,7 +4,8 @@ matplotlib              #plotting
 yfinance>=0.2.37        #data
 multitasking<0.013      #multithreading
 stockstats              #indicators
-ipynb                    #notebook
+ipykernel                   #notebook
 ta                      #technical analysis
 scikit-learn            #machine learning
-
+seaborn                 #visualization
+plotly                  #interactive charts
